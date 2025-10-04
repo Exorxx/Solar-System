@@ -358,18 +358,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for (let i = 0; i < belt.count; i++) {
       const angle = (i / belt.count) * 2 * Math.PI;
-
-      // 🌌 Random radial offset (±20px or adjust)
       const radialOffset = (Math.random() - 0.5) * 20;
-
-      // 🌠 Random angular jitter (±3 degrees converted to radians)
       const angularJitter = ((Math.random() - 0.5) * 6 * Math.PI) / 180;
-
-      // Apply the offsets
       const finalAngle = angle + angularJitter;
       const finalRadius = radius + radialOffset;
-
-      // 🪨 Create rock
       const rock = document.createElement("div");
       rock.classList.add("asteroid-fragment");
       rock.style.width = `${belt.size}px`;
