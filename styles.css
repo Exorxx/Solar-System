@@ -31,7 +31,7 @@ body {
   width: 12%;
   height: 12%;
   transform: translateX(-50%) translateY(-50%);
-  background-image: url('/assets/images/sun.png');
+  background-image: url('/assets/images/sun.webp');
   background-size: cover;
   background-position: center;
 }
@@ -50,19 +50,31 @@ body {
 .venus-orbit         { width: 24%;  height: 24%;  animation: revolve 8s linear infinite; }
 .earth-orbit         { width: 33%;  height: 33%;  animation: revolve 12s linear infinite; }
 .mars-orbit          { width: 42%;  height: 42%;  animation: revolve 20s linear infinite; }
-.asteroid-belt-orbit { width: 50%;  height: 50%;  animation: revolve 60s linear infinite; }
 .jupiter-orbit       { width: 60%;  height: 60%;  animation: revolve 30s linear infinite; }
 .saturn-orbit        { width: 70%;  height: 70%;  animation: revolve 40s linear infinite; }
 .uranus-orbit        { width: 80%;  height: 80%;  animation: revolve 50s linear infinite; }
 .neptune-orbit       { width: 90%;  height: 90%;  animation: revolve 60s linear infinite; }
-.kuiper-belt-orbit   { width: 98%;  height: 98%;  animation: revolve 120s linear infinite; }
 
 @keyframes revolve {
   from { transform: translate(-50%, -50%) rotate(0deg); }
   to   { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-.belt,
+@keyframes rotate-belt {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.asteroid-belt-orbit { width: 50%;  height: 50%;}
+.kuiper-belt-orbit   { width: 98%;  height: 98%;}
+
+.asteroid-belt-orbit,
+.kuiper-belt-orbit {
+  position: absolute;
+  border-radius: 50%;
+  overflow: visible;
+}
+
 .planet {
   position: absolute;
   top: 0;
@@ -76,17 +88,17 @@ body {
   cursor: pointer;
 }
 
-.mercury { width: 2%; height: 2%; background-image: url('/assets/images/mercury.png'); }
-.venus   { width: 3%; height: 3%; background-image: url('/assets/images/venus.png'); }
-.earth   { width: 3.5%; height: 3.5%; background-image: url('/assets/images/earth.png'); }
-.mars    { width: 2.5%; height: 2.5%; background-image: url('/assets/images/mars.png'); }
-.jupiter { width: 6%; height: 6%; background-image: url('/assets/images/jupiter.png'); }
-.saturn  { width: 9%; height: 9%; background-image: url('/assets/images/saturn.png'); }
-.uranus  { width: 4%; height: 4%; background-image: url('/assets/images/uranus.png'); }
-.neptune { width: 4%; height: 4%; background-image: url('/assets/images/neptune.png'); }
+.mercury { width: 2%; height: 2%; background-image: url('/assets/images/mercury.webp'); }
+.venus   { width: 3%; height: 3%; background-image: url('/assets/images/venus.webp'); }
+.earth   { width: 3.5%; height: 3.5%; background-image: url('/assets/images/earth.webp'); }
+.mars    { width: 2.5%; height: 2.5%; background-image: url('/assets/images/mars.webp'); }
+.jupiter { width: 6%; height: 6%; background-image: url('/assets/images/jupiter.webp'); }
+.saturn  { width: 9%; height: 9%; background-image: url('/assets/images/saturn.webp'); }
+.uranus  { width: 4%; height: 4%; background-image: url('/assets/images/uranus.webp'); }
+.neptune { width: 4%; height: 4%; background-image: url('/assets/images/neptune.webp'); }
 
-.asteroid { width: 4%; height: 4%; background-image: url('/assets/images/belt.png'); }
-.kuiper { width: 4%; height: 4%; background-image: url('/assets/images/belt.png'); }
+.asteroid { width: 4%; height: 4%; background-image: url('/assets/images/belt.webp'); }
+.kuiper { width: 4%; height: 4%; background-image: url('/assets/images/belt.webp'); }
 
 p {
   font-size: clamp(0.9rem, 2vw, 1.5rem);
@@ -104,3 +116,10 @@ p {
 #planet-info img {
   pointer-events: none;
 }
+
+.belt:active {
+  outline: 2px solid rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  transition: outline 0.2s ease;
+}
+

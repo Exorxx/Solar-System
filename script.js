@@ -73,7 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
       bgImage: "/assets/images/belt.png",
       bgPosition: "bottom left",
       glowColor: "#ff3300",
-      bgAngle: 10,
+      bgAngle: 280,
     },
     Kuiper: {
       description:
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
       bgImage: "/assets/images/belt.png",
       bgPosition: "bottom right",
       glowColor: "#ff3300",
-      bgAngle: 10,
+      bgAngle: 280,
     },
   };
 
@@ -92,7 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
   infoBox.style.height = "90%";
   infoBox.style.margin = "auto";
   infoBox.style.padding = ".625rem";
-  infoBox.style.border = "solid .3125rem orange";
   infoBox.style.background = "rgba(0, 0, 0, 0.5)";
   infoBox.style.color = "white";
   infoBox.style.display = "none";
@@ -325,27 +324,103 @@ document.addEventListener("DOMContentLoaded", () => {
         />
     `;
 
+    infoBox.style.border = `solid ${data.glowColor}`;
     infoBox.style.display = "block";
   }
 
-  document.querySelectorAll(".planet").forEach((planet) => {
-    planet.addEventListener("click", () => {
-      const name = planet.dataset.planet;
-      showInfo(name, planetData[name]);
-    });
+  const belts = [
+    {
+      selector: ".asteroid-belt-orbit",
+      count: 80,
+      image: "/assets/images/belt.webp",
+      size: 4,
+      duration: 40,
+    },
+    {
+      selector: ".kuiper-belt-orbit",
+      count: 120,
+      image: "/assets/images/belt.webp",
+      size: 5,
+      duration: 80,
+    },
+  ];
+
+  belts.forEach((belt) => {
+    const orbit = document.querySelector(belt.selector);
+    if (!orbit) return;
+
+    const beltContainer = document.createElement("div");
+    beltContainer.classList.add("belt-container");
+    orbit.appendChild(beltContainer);
+
+    const radius = orbit.offsetWidth / 2;
+    const center = radius;
+
+    for (let i = 0; i < belt.count; i++) {
+      const angle = (i / belt.count) * 2 * Math.PI;
+
+      // 🌌 Random radial offset (±20px or adjust)
+      const radialOffset = (Math.random() - 0.5) * 20;
+
+      // 🌠 Random angular jitter (±3 degrees converted to radians)
+      const angularJitter = ((Math.random() - 0.5) * 6 * Math.PI) / 180;
+
+      // Apply the offsets
+      const finalAngle = angle + angularJitter;
+      const finalRadius = radius + radialOffset;
+
+      // 🪨 Create rock
+      const rock = document.createElement("div");
+      rock.classList.add("asteroid-fragment");
+      rock.style.width = `${belt.size}px`;
+      rock.style.height = `${belt.size}px`;
+      rock.style.position = "absolute";
+      rock.style.left = `${
+        center + Math.cos(finalAngle) * finalRadius - belt.size / 2
+      }px`;
+      rock.style.top = `${
+        center + Math.sin(finalAngle) * finalRadius - belt.size / 2
+      }px`;
+
+      rock.style.backgroundImage = `url('${belt.image}')`;
+      rock.style.backgroundSize = "cover";
+      rock.style.borderRadius = "50%";
+      rock.style.opacity = Math.random() * 0.7 + 0.3;
+      rock.style.pointerEvents = "auto";
+      rock.style.cursor = "pointer";
+
+      rock.addEventListener("click", (e) => {
+        const name = orbit.classList.contains("asteroid-belt-orbit")
+          ? "Asteroid"
+          : "Kuiper";
+        showInfo(name + " Belt", beltData[name]);
+      });
+
+      beltContainer.appendChild(rock);
+    }
+
+    beltContainer.style.position = "absolute";
+    beltContainer.style.top = 0;
+    beltContainer.style.left = 0;
+    beltContainer.style.width = "100%";
+    beltContainer.style.height = "100%";
+    beltContainer.style.borderRadius = "50%";
+    beltContainer.style.animation = `rotate-belt ${belt.duration}s linear infinite`;
   });
 
-  document.querySelectorAll(".belt").forEach((belt) => {
-    belt.addEventListener("click", () => {
-      const name = belt.dataset.belt;
-      showInfo(name, beltData[name]);
+  document.querySelectorAll(".planet").forEach((planet) => {
+    planet.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const name = planet.dataset.planet;
+      showInfo(name, planetData[name]);
     });
   });
 
   document.addEventListener("click", (e) => {
     if (
       !e.target.classList.contains("planet") &&
-      !e.target.classList.contains("belt")
+      !e.target.classList.contains("belt") &&
+      !e.target.classList.contains("asteroid-fragment")
     ) {
       infoBox.style.display = "none";
     }
